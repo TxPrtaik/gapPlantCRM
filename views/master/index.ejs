@@ -55,7 +55,7 @@
 
 
         <div class="col-md-3 p-2">
-            <a href="/vehical-list">
+            <a href="/completed-orders">
                 <div class="card card-body shadow  py-3 w-100">
                     <div class="row ">
                         <div class="hstack gap-3" >
@@ -63,14 +63,34 @@
                             <div class="vr"></div>
                             <div class=" text-center jusitfy-content-center">
                                 <h4>Total Order</h4>
-                                <h3><%-vd.ttlvd%></h3>
+                                <h3><%-ttl_order.ttl_order%></h3>
                             </div>
                         </div>
                     </div>
                 </div>
             </a>
         </div>
+        <div class="col-md-3 p-2" style="position: relative;">
+        <a href="/order-complete-request">
+        <%if(reqs.ttl>0){%>
+            <div style="position: absolute;right: 13px;top: 13px;padding: 4px;z-index: 99;border-radius: 50%;height: auto; width: auto;" class="bg-danger"></div>
 
+            <%}%>
+           
+                <div class="card card-body shadow  py-3 w-100">
+                    <div class="row ">
+                        <div class="hstack gap-3" >
+                            <img src="/images/checklist.png" height="60" width="auto">
+                            <div class="vr"></div>
+                            <div class=" text-center jusitfy-content-center">
+                                <h4> Complition Requests</h4>
+                                <h3><%-reqs.ttl%></h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
         <div class="col-md-3 p-2">
             <a href="/customer_list">
                 <div class="card card-body shadow  py-3 w-100">
@@ -87,6 +107,27 @@
                 </div>
             </a>
         </div>
+        <div class="col-md-3 p-2" style="position: relative;">
+            <a href="/leaves">
+            <%if(leaveReq.ttl>0){%>
+                <div style="position: absolute;right: 13px;top: 13px;padding: 4px;z-index: 99;border-radius: 50%;height: auto; width: auto;" class="bg-danger"></div>
+    
+                <%}%>
+               
+                    <div class="card card-body shadow  py-3 w-100">
+                        <div class="row ">
+                            <div class="hstack gap-3" >
+                                <img src="/images/delivery-boy.png" height="60" width="auto">
+                                <div class="vr"></div>
+                                <div class=" text-center jusitfy-content-center">
+                                    <h4> Leave Requests</h4>
+                                    <h3><%-leaveReq.ttl%></h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
 
         
 

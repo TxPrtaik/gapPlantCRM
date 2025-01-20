@@ -1,14 +1,30 @@
-var mysql = require('mysql')
+const mysql = require('mysql');
+const util = require('util');
 
-var util = require('util')
-
-var conn = mysql.createConnection({
+const conn = mysql.createConnection({
     host: "bun9fq9ycki9avlxsm6h-mysql.services.clever-cloud.com",
     user: "uhfctuxbu0ljcj9m",
     password: "s97lFinSkHJXw8Mmwq2c",
-    database: "bun9fq9ycki9avlxsm6h"
-})
+    database: "bun9fq9ycki9avlxsm6h",
+    
+});
 
-var exe = util.promisify(conn.query).bind(conn);
+// Promisify the query function for easier use with async/await
+const exe = util.promisify(conn.query).bind(conn);
 
-module.exports = exe
+// Handle connection errors
+conn.connect((err) => {
+    if (err) {
+        console.error('Error connecting to MySQL:', err.message || err);
+        return;
+    }
+    console.log('Connected to MySQL database!');
+});
+
+// Graceful error handling for the module
+conn.on('error', (err) => {
+    console.error('MySQL connection error:', err.code || err);
+    // Optional: Decide whether to reconnect based on the error type
+});
+
+module.exports = exe;

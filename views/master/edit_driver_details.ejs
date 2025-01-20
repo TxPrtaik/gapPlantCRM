@@ -43,17 +43,25 @@
                 </select>
             </div>
 
-            <div class="mb-3 col-md-6">
+            <div class="mb-3 col-md-4">
                 Driver Password*
                 <input type="text" name="driver_password" value="<%= driver_det.driver_password %>" required class="form-control">
             </div>
-            <div class="mb-3 col-md-6">
+            <div class="mb-3 col-md-4">
                 Driver Salary (per month)*
                 <input required type="number" name="driver_payment" value="<%= driver_det.salary %>" class="form-control">
             </div>
+            <div class="mb-3 col-md-4">
+                Join Date :
+                <input required type="text" readonly   value="<%= driver_det.join_date %>" class="form-control">
+            </div>
 
             <div class="mb-3 col-md-12 text-center">
-                <br>
+                <%if(driver_det.driver_kyc!=null){%>
+                    
+                    <a href="/driver-kyc/<%-driver_det.driver_details_id%>" class="btn btn-primary">Kyc Details</a>
+                    
+                    <%}%>
                 <button class="btn btn-primary" type="button" onclick="submitForm()">Update Driver Details</button>
             </div>
         </div>

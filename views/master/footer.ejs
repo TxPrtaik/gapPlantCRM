@@ -81,18 +81,29 @@
           $('#example').DataTable(); // Initialize the table with DataTables
       });
   </script>
+   <script>
+    $(document).ready(function() {
+        $('#example-1').DataTable(); // Initialize the table with DataTables
+    });
+</script>
 <script>
   function changeActiveMenu(){
     let url=location.href;
     
-    if(url.includes("add_driver")||url.includes("driver_list")||url.includes("edit_driver_details")){
+    if(url.includes("payment-history")||url.includes("driver-payment")||url.includes("add_driver")||url.includes("driver_list")||url.includes("edit_driver_details")){
     document.getElementById("dash").classList.remove("active");
       document.getElementById("driv-main").classList.add("active")
        document.getElementById("driv-main").classList.add("open")
+       if(url.includes("payment-history")){
+        document.getElementById("driv-sub-his").classList.add("active")
+       }
+       if(url.includes("driver-payment")){
+        document.getElementById("driv-sub-pay").classList.add("active")
+       }
        if(url.includes("add_driver")){
         document.getElementById("driv-sub-add").classList.add("active")
        }
-       else{
+       if(url.includes("driver_list")){
         document.getElementById("driv-sub-list").classList.add("active")
        }
     }
@@ -103,6 +114,7 @@
        if(url.includes("add-vehical")){
         document.getElementById("veh-sub-add").classList.add("active")
        }
+       
        else{
         document.getElementById("veh-sub-list").classList.add("active")
        }

@@ -37,7 +37,7 @@
                     <th>Address</th>
                     <th>Product</th>
                     <th>Qauntity</th>
-                   
+                   <th>Total</th>
                     <th>
                         <button class="btn btn-primary" onclick="addRow()">+</button>
                     </th>
@@ -95,8 +95,11 @@
                 
                 </td>
                 <td>
-                    <input type="number" placeholder="Quantity" id="qty-${j}" class="form-control" name="qty" >
+                    <input type="number" placeholder="Quantity" id="qty-${j}" onkeyup="setQty()" class="form-control" name="qty" >
                     </td>
+                    <td>
+                        <input type="number" readonly id="ttl-${j}" class="form-control" name="ttl">
+                        </td>
                  
                         <td>
                             <button class="btn btn-danger" onclick="deleteRow()"><i class="fa fa-trash"></i></button>
@@ -133,13 +136,15 @@ function sendData(){
         "product":[],
         "qty":[],
         "customer":[],
-        "address":[]
+        "address":[],
+        "total":[]
     }
    
     let pro=document.getElementsByName("product");
     let qty=document.getElementsByName("qty");
     let cust=document.getElementsByName("cust_id");
     let add=document.getElementsByName("cust_add");
+    let ttl=document.getElementsByName("ttl");
     for(let i of pro){
         obj.product.push(i.value);
     }
@@ -152,6 +157,9 @@ function sendData(){
     for(let i of add){
         obj.address.push(i.value);
     }
+    for(let i of ttl){
+   obj.total.push(i.value);
+    }
     $.ajax({
         "method":"post",
         "url":"/save-delivery",
@@ -160,5 +168,42 @@ function sendData(){
       location.href="/delivery-list"
     })
 }
+function setProduct(){
+    let index=event.target.id.split("-")[1];
+    setTotal(index);
+}
+function setQty(){
+    let index=event.target.id.split("-")[1];
+    let pro=document.getElementById("product-"+index).value;
+    let pr=  <%- JSON.stringify(product) %>;
+    for(let i of pr){
+        
+        if(i.stock_id==pro){
+            
+            if(Number(i.stock_qty)<=Number(event.target.value)){
+            console.log(i.stock_qty+"---------"+event.target.value)
+               alert("This Product is out of stock only "+i.stock_qty+" cylenders are remaining...");
+              document.getElementById('subbtn').disabled=true;
+            }
+            else{
+                document.getElementById('subbtn').disabled=false;
+
+            }
+        }
+    }
+
+setTotal(index);
+}
+function setTotal(ind){
+    let pro=document.getElementById("product-"+ind).value;
+    let qty=document.getElementById("qty-"+ind).value;
+    let pr=  <%- JSON.stringify(product) %>;
+for(let i of pr){
+    if(i.stock_id==pro){
+        console.log('helo');
+        document.getElementById("ttl-"+ind).value=qty*i.price;
+    }
+}
+    }
 </script>
 <%-include('footer.ejs')%>

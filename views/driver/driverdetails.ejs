@@ -43,6 +43,19 @@
         </div> 
 
         <div class="col-md-12 text-center mt-3">
+            <%if(driver.driver_kyc==null){%>
+       
+                <!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+  kyc
+  </button>
+  
+  <!-- Modal -->
+ 
+                <%}else{%>
+                    <a href="/driver/kyc-details/<%-driver.driver_details_id%>" class="btn btn-primary">Kyc Details</a>
+
+                    <%}%>
             <button class="btn btn-primary" type="button" onclick="submitForm()" >Update</button>
             <!-- <button class="btn btn-danger" type="button" onclick="deleteAc('<%-driver.driver_details_id%>')">Delete Account</button> -->
         </form>
@@ -51,6 +64,66 @@
 </div>
     </div>
 </div>
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Add Kyc details</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+<div class="col-md-6 mb-3 text-start">
+    <form method="post" enctype="multipart/form-data" action="/driver/driver-kyc/<%-driver.driver_details_id%>">
+
+
+
+ 
+    <label class="mb-2">Adhaar Number* :</label>
+<input type="number" name="adhaar_num" required class="form-control"/> 
+</div>
+<div class="col-md-6 mb-3 text-start">
+    <label class="mb-2">Adhaar Image* :</label>
+<input type="file" name="ad_img" required class="form-control"/> 
+</div>
+<div class="col-md-6 mb-3 text-start">
+    <label class="mb-2">Pan Number* :</label>
+<input type="text" onkeyup="makeCap(this)" name="pan_num" required class="form-control"/> 
+</div>
+<div class="col-md-6 mb-3 text-start">
+    <label class="mb-2">Pan Image* :</label>
+<input type="file"  name="pn_img" required class="form-control"/> 
+</div>
+<div class="col-md-6 mb-3 text-start">
+    <label class="mb-2">Bank Name* :</label>
+<input type="text" name="bank_name" required class="form-control"/> 
+</div>
+<div class="col-md-6 mb-3 text-start">
+    <label class="mb-2">Bank Account No.* :</label>
+<input type="text"  name="account_num" required class="form-control"/> 
+</div>
+<div class="col-md-6 mb-3 text-start">
+    <label class="mb-2">Bank Ifsc* :</label>
+<input type="text" name="back_ifsc" required class="form-control"/> 
+</div>
+<div class="col-md-6 mb-3 text-start">
+    <label class="mb-2">Passbook Image* :</label>
+<input type="file"  name="ps_img" required class="form-control"/> 
+</div>
+<div class="col-md-12 mb-3 text-start">
+<label class="mb-2">License Image* :</label>
+<input type="file" name="li_img" required class="form-control">
+</div>
+          </div>
+        </div>
+        <div class="modal-footer">
+
+          <button  class="btn btn-primary">Submit</button>
+        </form>
+        </div>
+      </div>
+    </div>
+  </div>
 <script>
     function submitForm(){
     let r=confirm('Update Profile ?');
@@ -66,6 +139,10 @@
     }
     function setImage(){
         document.getElementById("pfp").setAttribute("src",URL.createObjectURL(event.target.files[0]));
+    }
+    function makeCap(ele){
+    
+        ele.value=ele.value.toString().toUpperCase();
     }
     </script>
 

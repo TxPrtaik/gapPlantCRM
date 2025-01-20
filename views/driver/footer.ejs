@@ -94,7 +94,14 @@
     document.getElementById("dash").classList.remove("active");
     document.getElementById("c-task").classList.add("active");
     }
-  
+    if(url.includes("/salary")){
+    document.getElementById("dash").classList.remove("active");
+    document.getElementById("salary").classList.add("active");
+    }
+    if(url.includes("/leave")){
+    document.getElementById("dash").classList.remove("active");
+    document.getElementById("leave").classList.add("active");
+    }
   }
 
   changeActiveMenu();

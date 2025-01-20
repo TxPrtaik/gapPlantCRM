@@ -12,8 +12,10 @@
                 <th>Address</th>
                 <th>Product</th>
                 <th>Cylender Quantity</th>
-                <th>Return Cylenders Quantity</th>
-                <th>Paid Amount</th>
+                <th>Return Cylender Qty.</th>
+                <th>Total</th>
+                <th>Paid </th>
+                
                 <th>Bill</th>
                 <th>Status</th>
 
@@ -35,6 +37,7 @@
                 <%-data[i].product_name%></td>
             <td><%-data[i].qty%></td>
             <td><%-data[i].return_c%></td>
+            <td>&#8377; <%-data[i].total%></td>
             <td><%-data[i].paid_amount%></td>
             <td>
                 <a href="/order_bill/<%-data[i].order_id%>/<%-data[i].id%>">

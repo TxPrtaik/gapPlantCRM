@@ -2,7 +2,8 @@ let express=require('express');
 let route=express.Router();
 let exe=require("./connection");
 function validateDriver(req,res,next){
- 
+ req.session.did=1;
+
     if(req.session.did){
 next();
     }
@@ -71,7 +72,7 @@ route.get("/task",validateDriver,async(req,res)=>{
     let driver=await exe(`select*from driver_details where driver_details_id='${req.session.did}'`);
     let d=await exe(`select*,(select number from vehical where vehical.id=order_det.vehical ) as v_num,(select driver_name from driver_details where driver_details.driver_details_id=order_det.driver) as driver_name from order_det where driver='${req.session.did}' and status != 'completed' `);
     if(d.length!=0){
-     order=await exe(`select*,(select stock_name from stock where stock.stock_id=order_list.product) as product_name,(select cust_name from customer where customer.cust_id=order_list.customer_id) as c_name,(select cust_mobile from customer where customer.cust_id=order_list.customer_id) as c_num from order_list where order_id='${d[0].id}'`);
+     order=await exe(`select*,(select stock_name from stock where stock.stock_id=order_list.product) as product_name,(select cust_name from customer where customer.cust_id=order_list.customer_id) as c_name,(select cust_mobile from customer where customer.cust_id=order_list.customer_id) as c_num,(select status from complete_order where complete_order.order_list_id=order_list.id) as oc from order_list where order_id='${d[0].id}'`);
     }
     let obj={
         "driver":driver[0],
@@ -172,8 +173,14 @@ route.get("/order-list/:id",validateDriver,async(req,res)=>{
     res.redirect('/driver/expense/'+req.params.id);
    })
    route.post("/sell-product/:oid",async(req,res)=>{
+req.body.location_img=new Date().getTime()+req.files.img.name;
+req.files.img.mv("public/images/"+req.body.location_img);
     let d=req.body;
-    let da=await exe(`update order_list set isDone='true',return_c_name='${d.return_c_name}',return_c='${d.return_c}',paid_amount='${d.paid_amount}' where id='${req.params.oid}'`);
+    
+    let da=await exe(`update order_list set return_c_name='${d.return_c_name}',return_c='${d.return_c}',total='${d.total}',paid_amount='${d.paid_amount}' where id='${req.params.oid}'`);
+   
+    let daa=await exe(`insert into complete_order(order_list_id,location_img,pending_amt,status,date) value('${req.params.oid}','${d.location_img}','${d.pending_amt}','requested','${new Date().toISOString().slice(0,10)}')`);
+
     res.redirect("/driver/task");
    })
    route.get("/expense-list/:oid",validateDriver,async(req,res)=>{
@@ -193,6 +200,54 @@ route.get("/order-inv/:oid/:lid",validateDriver,async(req,res)=>{
         "oder_list":oder_list[0]
     }
   res.render("driver/orderbill.ejs",obj);
+})
+route.post("/driver-kyc/:id",async(req,res)=>{
+    
+    req.body.adhaar_img=new Date().getTime()+req.files.ad_img.name;
+    req.files.ad_img.mv("public/images/"+req.body.adhaar_img);
+    req.body.pan_img=new Date().getTime()+req.files.pn_img.name;
+    req.files.pn_img.mv("public/images/"+req.body.pan_img);
+    req.body.passbook_img=new Date().getTime()+req.files.ps_img.name;
+    req.files.ps_img.mv("public/images/"+req.body.passbook_img);
+    
+    req.body.licen_img=new Date().getTime()+req.files.li_img.name;
+    req.files.li_img.mv("public/images/"+req.body.licen_img);
+    let d=req.body;
+    let da=await exe(`insert into driver_kyc(driver_id,pan_num,adhaar_num,bank_name,account_num,back_ifsc,pan_img,adhaar_img,passbook_img,licen_img) values('${req.params.id}','${d.pan_num}','${d.adhaar_num}','${d.bank_name}','${d.account_num}','${d.back_ifsc}','${d.pan_img}','${d.adhaar_img}','${d.passbook_img}','${d.licen_img}')`);
+        let update_dr=await exe(`update driver_details set driver_kyc='${da.insertId}' where driver_details_id='${req.params.id}'`);;
+   
+        res.redirect("/driver/driver-profile");
+
+})
+route.get("/kyc-details/:did",validateDriver,async(req,res)=>{
+    let d=await exe(`select*from driver_kyc where driver_id='${req.params.did}'`);
+    let driver=await exe(`select*from driver_details where driver_details_id='${req.session.did}'`);
+    
+    var obj ={"driver":driver[0],
+        "kyc":d[0]
+    }
+    res.render("driver/kycdetails.ejs",obj);
+})
+route.get("/leave",validateDriver,async(req,res)=>{
+  
+    let driver=await exe(`select*from driver_details where driver_details_id='${req.session.did}'`);
+    let d=await exe(`select*from driver_leave where did='${req.session.did}'`);
+    var obj ={"driver":driver[0],
+       "data":d
+    }
+    res.render("driver/leave.ejs",obj);
+})
+route.post("/add-leave",async(req,res)=>{
+    let d=await exe(`insert into driver_leave(did,reason,date,status,type) values('${req.session.did}','${req.body.reason}','${req.body.date}','requested','${req.body.type}')`);;
+    res.redirect("/driver/leave")
+})
+route.get("/salary",validateDriver,async(req,res)=>{
+    let d=await exe(`select*from driver_payment where driver='${req.session.did}'`);
+    let driver=await exe(`select*from driver_details where driver_details_id='${req.session.did}'`);
+    var obj ={"driver":driver[0],
+        "data":d
+     }
+     res.render("driver/salary.ejs",obj);
 })
 
 module.exports=route;

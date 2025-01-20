@@ -13,6 +13,7 @@
                 <th>Product</th>
                 <th>Cylender Quantity</th>
                 <th>Return Cylenders Quantity</th>
+               <th>Total</th>
                 <th>Paid Amount</th>
                 <th>Status</th>
                 <th>Invoice</th>
@@ -35,6 +36,7 @@
                 <%-data[i].product_name%></td>
             <td><%-data[i].qty%></td>
             <td><%-data[i].return_c%></td>
+            <th><%-data[i].total%></th>
             <td><%-data[i].paid_amount%></td>
             <td class="<%-(data[i].isDone=='false')?'text-warning':'text-success'%>"><%-(data[i].isDone=='false')?'pending':'delivered'%></td>
             <td>
